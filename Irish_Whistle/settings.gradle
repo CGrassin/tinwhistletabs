@@ -1,0 +1,2 @@
+rootProject.name='Irish Whistle Tabs'
+include ':app'

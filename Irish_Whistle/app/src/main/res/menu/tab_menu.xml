@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/tabAction_tempo"
+        android:title="@string/menu_tempo"
+        android:icon="@drawable/ic_timer"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/tabAction_key"
+        android:title="@string/menu_key"
+        android:icon="@drawable/ic_music_note"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/tabAction_more"
+        android:title="@string/TabActivity_more"
+        android:icon="@drawable/ic_more"
+        app:showAsAction="ifRoom" />
+</menu>

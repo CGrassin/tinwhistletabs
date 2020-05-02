@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/mainActivity_sheetPicture"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        tools:background="#AAA"
+        android:contentDescription="@string/mainActivity_sheetPicturePlaceholder" />
+
+    <TextView
+        android:id="@+id/mainActivity_SheetName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:layout_marginLeft="10dp"
+        android:textStyle="bold"
+        tools:text="@string/mainActivity_sheetTitlePlaceholder"
+        android:layout_toRightOf="@+id/mainActivity_sheetPicture"
+        android:layout_alignTop="@+id/mainActivity_sheetPicture"
+        tools:ignore="RtlHardcoded" />
+
+    <TextView
+        android:id="@+id/mainActivity_SheetAuthor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/darker_gray"
+        android:layout_alignLeft="@+id/mainActivity_SheetName"
+        android:layout_below="@+id/mainActivity_SheetName"
+        android:maxLines="2"
+        android:ellipsize="end"
+        tools:text="@string/mainActivity_sheetAuthorPlaceholder"
+        />
+</RelativeLayout>
