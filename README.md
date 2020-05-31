@@ -5,6 +5,7 @@ Irish Whistle Tabs is an open-source tool to learn and improve your tin whistle 
 ![Promo banner](pictures/banner.png)
 
 **Google play link**: https://play.google.com/store/apps/details?id=fr.charleslabs.tinwhistletabs
+
 **Technical article link**: https://charleslabs.fr/en/project-Irish+Whistle+Tab+-+Android+app
 
 This repo contains the Android Studio project and the database generator.
