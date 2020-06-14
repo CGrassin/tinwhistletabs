@@ -30,6 +30,7 @@ import fr.charleslabs.tinwhistletabs.dialogs.TempoDialog;
 import fr.charleslabs.tinwhistletabs.music.MusicDB;
 import fr.charleslabs.tinwhistletabs.music.MusicNote;
 import fr.charleslabs.tinwhistletabs.music.MusicPlayer;
+import fr.charleslabs.tinwhistletabs.music.MusicSettings;
 import fr.charleslabs.tinwhistletabs.music.MusicSheet;
 import fr.charleslabs.tinwhistletabs.utils.AndroidUtils;
 
@@ -41,7 +42,6 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
     private  boolean isPlaying = false;
     private MusicSheet sheet = null;
     private int tempo = 100; // %
-    private String key;
     private Handler musicHandler = new Handler();
     private List<MusicNote> notes;
 
@@ -65,7 +65,6 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
         final Intent intent = getIntent();
         if (!intent.hasExtra(MainActivity.EXTRA_SHEET)) finish();
         sheet = (MusicSheet)intent.getSerializableExtra(MainActivity.EXTRA_SHEET);
-        key = sheet.getKey();
 
         // Set action bar title
         try{
@@ -84,6 +83,7 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
         scrollView = findViewById(R.id.TabActivity_tabScrollPane);
         tab.setText(MusicSheet.notesToTabs(notes), TextView.BufferType.SPANNABLE);
         span = (Spannable)tab.getText();
+        this.sheet.transposeKey(notes, sheet.getKey(), MusicSettings.currentKey);
 
         // Media buttons
         findViewById(R.id.TabActivity_btnPlayPause).setOnClickListener(new View.OnClickListener() {
@@ -122,7 +122,7 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
                 tempoDialog.show(getSupportFragmentManager(),"dialog");
                 break;
             case R.id.tabAction_key:
-                final DialogFragment keyDialog = new KeyDialog(key, this);
+                final DialogFragment keyDialog = new KeyDialog(MusicSettings.currentKey, this);
                 keyDialog.show(getSupportFragmentManager(),"dialog");
                 break;
             case R.id.tabAction_more:
@@ -188,11 +188,13 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
     }
 
     private void drawCursor(final boolean scroll){
-        span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorAccent)),
-                cursorPos, cursorPos+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        Layout layout = tab.getLayout();
-        if(scroll)
-            scrollView.scrollTo(0, layout.getLineTop(layout.getLineForOffset(cursorPos)));
+        try {
+                span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorAccent)),
+                        cursorPos, cursorPos + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                Layout layout = tab.getLayout();
+                if (scroll)
+                    scrollView.scrollTo(0, layout.getLineTop(layout.getLineForOffset(cursorPos)));
+        } catch(Exception ignored){}
     }
 
     @Override
@@ -212,8 +214,8 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
     @Override
     public void keyChangeCallback(String newKey) {
         this.stop();
-        this.sheet.transposeKey(notes, key, newKey);
-        key = newKey;
+        this.sheet.transposeKey(notes, MusicSettings.currentKey, newKey);
+        MusicSettings.currentKey = newKey;
         this.setTune();
     }
 

@@ -40,13 +40,16 @@ public class MusicSheet implements Serializable {
     }
 
     public void transposeKey(final List<MusicNote> notes, final String oldKey, final String newKey){
-        final int shift = MusicSettings.getShift(newKey) -  MusicSettings.getShift(oldKey);
-        transpose(notes,shift);
+        if (!oldKey.equals(newKey)) {
+            final int shift = MusicSettings.getShift(newKey) - MusicSettings.getShift(oldKey);
+            transpose(notes, shift);
+        }
     }
 
     private static void transpose(final List<MusicNote> notes, final int shift){
-        for(MusicNote note : notes)
-            note.transpose(shift);
+        if(shift != 0)
+            for(MusicNote note : notes)
+                note.transpose(shift);
     }
 
     public static String notesToTabs(final List<MusicNote> notes) {
