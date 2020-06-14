@@ -16,7 +16,12 @@ public class Utils {
         final int bufferSize = 1024;
         final char[] buffer = new char[bufferSize];
         final StringBuilder out = new StringBuilder();
-        Reader in = new InputStreamReader(stream, StandardCharsets.UTF_8);
+        Reader in = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            in = new InputStreamReader(stream, StandardCharsets.UTF_8);
+        } else {
+            in = new InputStreamReader(stream, "UTF-8");
+        }
         for (;;){
             int rsz = in.read(buffer,0,buffer.length);
             if (rsz <0)
