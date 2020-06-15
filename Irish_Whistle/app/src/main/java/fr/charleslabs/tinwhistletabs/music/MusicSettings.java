@@ -12,9 +12,9 @@ public final class MusicSettings {
     final public static int MIN_TEMPO = 15, MAX_TEMPO = 300;
 
     // KEYS
-    final public static String DEFAULT_KEY = "D";
-    final public static String[] WHISTLE_KEYS = {"D","G","C","F","Bb","Eb","Low D","Low F","Low Eb","Low C","A","B","Db","E","Gb","Ab"};
-    private final static int[] WHISTLE_OFFSET_D = {0,5,-2,3,8,1,-12,-9,-11,-14,7,9,-1,2,4,6}; // Offset from D
+    final public static String DEFAULT_KEY = "High D";
+    final public static String[] WHISTLE_KEYS = {"High G","High F","High E","High Eb","High D","High Db","High C","B","Bb","Low A","Low G","Low F","Low E","Low Eb","Low D","Low C"};
+    private final static int[] WHISTLE_OFFSET_D = {5,3,2,1,0,-1,-2,-3,-4,-5,-7,-9,-10,-11,-12,-14}; // Offset from High D
     public static String currentKey = DEFAULT_KEY;
 
     // OTHER
