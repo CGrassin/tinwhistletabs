@@ -14,6 +14,7 @@ This repo contains the Android Studio project and the database generator.
 
 * Improve flute synth
 * Add more tunes
+* Add tunes request form
 * Add sorting and filtering functions
 
 ## Technical details

@@ -202,13 +202,13 @@ with open(output_file, 'w') as database:
 
     database.write('\n]')
 
-# TODO sort JSON
-#with open(output_file, 'r') as database:
-#    db = json.loads(database.read())
-#with open(output_file, 'w') as database:
-#    database.write(sorted(db, key = lambda i: i['title']))
-#abc2midi("kerry-7.abc","tmp.mid")
-#print(midi2string("tmp.mid"))
-#midi2string("rest.mid")
-#rmFile("tmp.mid")
+# Sort json
+print('Sorting database...')
+with open(output_file, 'r') as database:
+    database = json.load(database)
+    data = sorted(database, key=lambda k: k['title'])
+
+with open(output_file, 'w') as database:
+    json.dump(data, database,ensure_ascii=False)
     
+print('Done!')

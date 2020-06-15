@@ -42,9 +42,9 @@ public class MusicPlayer {
             index += genNote(note,tempoModifier,music,index);
         }
 
-        //TinWhistleSynth.reverb(music, (int)(SAMPLE_RATE*0.1f), 0.3f);
-        //TinWhistleSynth.reverb(music, (int)(SAMPLE_RATE*0.1f), 0.2f);
-        //TinWhistleSynth.reverb(music, (int)(SAMPLE_RATE*0.05f), 0.1f);
+        TinWhistleSynth.reverb(music, (int)(SAMPLE_RATE*0.1f), 0.2f);
+        TinWhistleSynth.reverb(music, (int)(SAMPLE_RATE*0.2f), 0.1f);
+        TinWhistleSynth.reverb(music, (int)(SAMPLE_RATE*0.3f), 0.05f);
 
         return toneToBytePCM(music);
     }
