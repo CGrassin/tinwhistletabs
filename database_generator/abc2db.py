@@ -11,7 +11,7 @@ import os, mido, re
 
 # =============ABC=====================
 def abc2midi(abc_file, output_file, verbose=False):
-    os.popen("./abc2midi "+abc_file+" -o "+output_file + " -NGUI").read()
+    os.popen("abc2midi "+abc_file+" -o "+output_file + " -NGUI").read()
     if verbose: print("Converted "+abc_file+" to MIDI")
 
 # =============Files====================

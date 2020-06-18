@@ -41,7 +41,7 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
     // States
     private  boolean isPlaying = false;
     private MusicSheet sheet = null;
-    private int tempo = 100; // %
+    private int tempo = MusicSettings.DEFAULT_TEMPO;
     private Handler musicHandler = new Handler();
     private List<MusicNote> notes;
 

@@ -3,6 +3,8 @@ package fr.charleslabs.tinwhistletabs.dialogs;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -35,7 +37,7 @@ public class TempoDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
-        return new AlertDialog.Builder(getActivity())
+        final Dialog dialog =  new AlertDialog.Builder(getActivity())
                 .setTitle(getText(R.string.tempoDialog_title))
                 //.setIcon(R.drawable.ic_timer_black)
                 .setMessage(getResources().getString(R.string.tempoDialog_message,
@@ -55,10 +57,18 @@ public class TempoDialog extends DialogFragment {
                             // Get and cast
                             int newTempo = Integer.parseInt(tempoText.getText().toString());
                             // Bounds
-                            if(newTempo > MusicSettings.MAX_TEMPO)
+                            if(newTempo > MusicSettings.MAX_TEMPO){
                                 newTempo = MusicSettings.MAX_TEMPO;
-                            else if(newTempo < MusicSettings.MIN_TEMPO)
+                                Toast.makeText(getContext(),
+                                        getResources().getString(R.string.tempoDialog_error_max,
+                                                MusicSettings.MAX_TEMPO),Toast.LENGTH_LONG).show();
+                            }
+                            else if(newTempo < MusicSettings.MIN_TEMPO) {
                                 newTempo = MusicSettings.MIN_TEMPO;
+                                Toast.makeText(getContext(),
+                                        getResources().getString(R.string.tempoDialog_error_min,
+                                                MusicSettings.MIN_TEMPO),Toast.LENGTH_LONG).show();
+                            }
                             // Callback
                             caller.tempoChangeCallback(newTempo);
                         } catch (Exception e){
@@ -70,6 +80,10 @@ public class TempoDialog extends DialogFragment {
                     }
                 })
                 .create();
+        try{
+            dialog.getWindow().setSoftInputMode (WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        }catch (Exception ignored){}
+        return dialog;
     }
 
     @Override
@@ -77,5 +91,6 @@ public class TempoDialog extends DialogFragment {
         super.onStart();
         tempoText = getDialog().findViewById(R.id.tempoDialog_bpm);
         tempoText.setText(Integer.toString(initialTempo));
+        tempoText.requestFocus(); // open kb
     }
 }

@@ -16,9 +16,11 @@
 
     <!-- Tempo dialog -->
     <string name="tempoDialog_title">Change tempo</string>
-    <string name="tempoDialog_message">Select new tempo modifier in percent (between %1$d and %2$d).</string>
+    <string name="tempoDialog_message">Select new tempo modifier in percent (between %1$d and %2$d%%).</string>
     <string name="tempoDialog_editHint">Set tempo</string>
     <string name="tempoDialog_error">Invalid tempo (%1$s).</string>
+    <string name="tempoDialog_error_min">Too slow! Changed to minimum value (%1$d%%).</string>
+    <string name="tempoDialog_error_max">Too fast! Changed to maximum value (%1$d%%).</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_set">Set</string>
 
