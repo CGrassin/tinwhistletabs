@@ -16,6 +16,7 @@ This repo contains the Android Studio project and the database generator.
 * Add more tunes
 * Add tunes request form
 * Add sorting and filtering functions
+* Add instructions (how to read tabs)
 
 ## Technical details
 
