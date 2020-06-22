@@ -4,7 +4,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import fr.charleslabs.tinwhistletabs.R;
+import fr.charleslabs.tinwhistletabs.TabActivity;
 import fr.charleslabs.tinwhistletabs.music.MusicSettings;
 
 public class TempoDialog extends DialogFragment {
@@ -20,17 +21,20 @@ public class TempoDialog extends DialogFragment {
      * Callback interface.
      */
     public interface TempoChangeCallback{
-        void tempoChangeCallback(int newTempo);
+        void tempoChangeCallback(int newTempo, boolean isDelayApplied);
     }
 
     // States
     private int initialTempo;
     private EditText tempoText;
+    private boolean initialCBState;
+    private CheckBox checkbox;
     private TempoChangeCallback caller;
 
-    public TempoDialog(int initialTempo, TempoChangeCallback caller) {
+    public TempoDialog(int initialTempo, boolean initialCBState, TempoChangeCallback caller) {
         super();
         this.initialTempo = initialTempo;
+        this.initialCBState = initialCBState;
         this.caller = caller;
     }
 
@@ -69,8 +73,9 @@ public class TempoDialog extends DialogFragment {
                                         getResources().getString(R.string.tempoDialog_error_min,
                                                 MusicSettings.MIN_TEMPO),Toast.LENGTH_LONG).show();
                             }
+
                             // Callback
-                            caller.tempoChangeCallback(newTempo);
+                            caller.tempoChangeCallback(newTempo, checkbox.isChecked());
                         } catch (Exception e){
                             // Non-numeric?
                             Toast.makeText(getContext(),
@@ -92,5 +97,10 @@ public class TempoDialog extends DialogFragment {
         tempoText = getDialog().findViewById(R.id.tempoDialog_bpm);
         tempoText.setText(Integer.toString(initialTempo));
         tempoText.requestFocus(); // open kb
+
+        checkbox = getDialog().findViewById(R.id.tempoDialog_checkbox);
+        checkbox.setChecked(this.initialCBState);
+        checkbox.setText(getResources().getString(R.string.tempoDialog_checkbox,
+                TabActivity.START_DELAY_AMOUNT));
     }
 }

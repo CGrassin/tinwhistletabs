@@ -38,10 +38,13 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
         KeyDialog.KeyChangeCallback, SingleTapTouchListener.SingleTapCallback {
     public static final String EXTRA_ABC= "fr.charleslabs.tinwhistletabs.ABC";
     public static final String EXTRA_SHEET_TITLE= "fr.charleslabs.tinwhistletabs.SHEET_TITLE";
+    public static int START_DELAY_AMOUNT = 1; // s
+
     // States
     private  boolean isPlaying = false;
     private MusicSheet sheet = null;
     private int tempo = MusicSettings.DEFAULT_TEMPO;
+    private boolean isStartDelayed = false;
     private Handler musicHandler = new Handler();
     private List<MusicNote> notes;
 
@@ -118,7 +121,7 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.tabAction_tempo:
-                final DialogFragment tempoDialog = new TempoDialog(tempo, this);
+                final DialogFragment tempoDialog = new TempoDialog(tempo, isStartDelayed, this);
                 tempoDialog.show(getSupportFragmentManager(),"dialog");
                 break;
             case R.id.tabAction_key:
@@ -150,15 +153,24 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
     }
     private void playPause(){
         if(!isPlaying){
-            moveCursor(musicHandler,cursorPos);
-            MusicPlayer.getInstance().play();
             isPlaying = true;
+            if (!isStartDelayed)
+                play();
+            else
+                musicHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {play();}
+                }, START_DELAY_AMOUNT * 1000L);
         } else {
             musicHandler.removeCallbacksAndMessages(null);
             MusicPlayer.getInstance().pause();
             isPlaying = false;
         }
+    }
 
+    private void play(){
+        moveCursor(musicHandler, cursorPos);
+        MusicPlayer.getInstance().play();
     }
 
     private void stop(){
@@ -206,17 +218,22 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
 
     // Settings callbacks
     @Override
-    public void tempoChangeCallback(int newTempo) {
-        this.stop();
-        tempo = newTempo;
-        this.setTune();
+    public void tempoChangeCallback(int newTempo, boolean isDelayApplied) {
+        if(newTempo != tempo) {
+            this.stop();
+            tempo = newTempo;
+            this.setTune();
+        }
+        isStartDelayed = isDelayApplied;
     }
     @Override
     public void keyChangeCallback(String newKey) {
-        this.stop();
-        this.sheet.transposeKey(notes, MusicSettings.currentKey, newKey);
-        MusicSettings.currentKey = newKey;
-        this.setTune();
+        if(!newKey.equals(MusicSettings.currentKey)) {
+            this.stop();
+            this.sheet.transposeKey(notes, MusicSettings.currentKey, newKey);
+            MusicSettings.currentKey = newKey;
+            this.setTune();
+        }
     }
 
     // Scale tab on pinch
