@@ -27,6 +27,7 @@ public class KeyDialog extends DialogFragment {
     public KeyDialog(String initialKey, KeyChangeCallback caller) {
         this.initialKey = initialKey;
         this.caller = caller;
+        selectedItem = java.util.Arrays.asList(MusicSettings.WHISTLE_KEYS).indexOf(initialKey);
     }
 
     @NonNull
