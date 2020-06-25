@@ -21,7 +21,7 @@
     <string name="tempoDialog_error">Invalid tempo (%1$s).</string>
     <string name="tempoDialog_error_min">Too slow! Changed to minimum value (%1$d%%).</string>
     <string name="tempoDialog_error_max">Too fast! Changed to maximum value (%1$d%%).</string>
-    <string name="tempoDialog_checkbox">Add a %1$ds delay before playing (time to pick up whistle)</string>
+    <string name="tempoDialog_checkbox">Add a %1$.1fs delay before playing (time to pick up whistle)</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_set">Set</string>
 

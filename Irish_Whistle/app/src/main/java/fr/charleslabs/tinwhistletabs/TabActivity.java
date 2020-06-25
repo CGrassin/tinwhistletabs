@@ -38,8 +38,8 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
         KeyDialog.KeyChangeCallback, SingleTapTouchListener.SingleTapCallback {
     public static final String EXTRA_ABC= "fr.charleslabs.tinwhistletabs.ABC";
     public static final String EXTRA_SHEET_TITLE= "fr.charleslabs.tinwhistletabs.SHEET_TITLE";
-    public static int START_DELAY_AMOUNT = 1; // s
-
+    public static final float START_DELAY_AMOUNT = 1.5f; // s
+    public static final int COUNTDOWN_STEPS = 3;
     // States
     private  boolean isPlaying = false;
     private MusicSheet sheet = null;
@@ -52,6 +52,7 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
     private ScrollView scrollView;
     private Spannable span = null;
     private  TextView tab = null;
+    private  TextView countdownOverlay = null;
 
     // Zoom
     private ScaleGestureDetector mScaleDetector;
@@ -78,6 +79,7 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
 
         // Sheet UI
         tab = findViewById(R.id.TabActivity_tab);
+        countdownOverlay = findViewById(R.id.TabActivity_countdown);
         try {
             notes = MusicDB.open(this, sheet.getFile());
         } catch (Exception e) {
@@ -101,8 +103,6 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
         });
         findViewById(R.id.TabActivity_btnInfo).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                /*final SheetInfoDialog sheetInfoDialog = new SheetInfoDialog(getApplicationContext(), sheet);
-                sheetInfoDialog.show(getSupportFragmentManager(),"dialog");*/
                 stop();
                 Intent intent = new Intent(getApplicationContext(), SheetActivity.class);
                 intent.putExtra(EXTRA_ABC, sheet.getABC());
@@ -156,16 +156,31 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
             isPlaying = true;
             if (!isStartDelayed)
                 play();
-            else
-                musicHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {play();}
-                }, START_DELAY_AMOUNT * 1000L);
+            else{
+                countdown(COUNTDOWN_STEPS-1);
+            }
         } else {
             musicHandler.removeCallbacksAndMessages(null);
             MusicPlayer.getInstance().pause();
+            countdownOverlay.setVisibility(View.GONE);
             isPlaying = false;
         }
+    }
+
+    private void countdown(final int stepsLeft){
+        countdownOverlay.setVisibility(View.VISIBLE);
+        countdownOverlay.setText(Integer.toString(stepsLeft+1));
+        musicHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(stepsLeft <= 0){
+                    countdownOverlay.setVisibility(View.GONE);
+                    play();
+                }
+                else
+                    countdown(stepsLeft - 1);
+            }
+        }, (long)((START_DELAY_AMOUNT * 1000)/COUNTDOWN_STEPS));
     }
 
     private void play(){
@@ -174,6 +189,7 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
     }
 
     private void stop(){
+        countdownOverlay.setVisibility(View.GONE);
         cursorPos = 0;
         musicHandler.removeCallbacksAndMessages(null);
         AndroidUtils.clearSpans(span);
@@ -224,7 +240,7 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
             tempo = newTempo;
             this.setTune();
         }
-        isStartDelayed = isDelayApplied;
+        this.isStartDelayed = isDelayApplied;
     }
     @Override
     public void keyChangeCallback(String newKey) {

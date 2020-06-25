@@ -52,4 +52,17 @@
             style="@style/Widget.AppCompat.Button.Colored"/>
     </LinearLayout>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/TabActivity_countdown"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="#000"
+            android:alpha="0.5"
+            android:textSize="250dp"
+            android:gravity="center" />
+    </FrameLayout>
 </RelativeLayout>
