@@ -184,6 +184,7 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
     }
 
     private void play(){
+        MusicPlayer.getInstance().move(MusicSheet.noteIndexToTime(notes, cursorPos,(float)tempo/100f));
         moveCursor(musicHandler, cursorPos);
         MusicPlayer.getInstance().play();
     }
