@@ -54,6 +54,11 @@ def autoTranspose(notes_pitch, allow_half_holed=False):
     else:
         raise Exception("Couldn't transpose tune!")
 
+offsetsD = ["D", "Db", "C", "B", "Bb", "A", "G#", "G", "F#",  "F", "E", "Eb"]
+def getWhistle(shift):
+    shift = (shift + 120)%12
+    return offsetsD[shift]
+
 # =============Output===================
 def midi2string(midi_file):
     output = ""
@@ -85,10 +90,10 @@ def midi2string(midi_file):
         
     # remove trailing comma        
     output = output[:-1]
-    return output
+    return output, shift
 
 def addDBentry(database, tune_title, tune_author, tune_type, tune_license, tune_abc,
-               tune_sheetauthor, notes_filename,isFirstTune):
+               tune_sheetauthor, notes_filename, shift, isFirstTune):
     tune_title = tune_title.replace('"','\\"')
     if tune_title[-5:] ==', The': tune_title = 'The ' + tune_title[:-5]
     
@@ -102,6 +107,7 @@ def addDBentry(database, tune_title, tune_author, tune_type, tune_license, tune_
     if tune_license is not None: 
         database.write('"license":"'+tune_license.replace('\n','').replace('"','\\"')+'",')
     tune_license
+    database.write('"whistle":"'+getWhistle(shift)+'",')
     database.write('"abc":"'+tune_abc.replace('\r\n','\n').replace('\r','\n').replace('\n','\\\\n').replace('"','\\"')+'",')
     database.write('"file":"'+notes_filename+'"')
     database.write('}')
@@ -111,17 +117,17 @@ def abc2notes(tune_abc):
         content_file.write(tune_abc)
     abc2midi("tmp.abc","tmp.mid")
     rmFile("tmp.abc")
-    tune_notes = midi2string("tmp.mid")
+    tune_notes, shift = midi2string("tmp.mid")
     rmFile("tmp.mid")
-    return tune_notes
+    return tune_notes, shift
 
 def writeNotes(tune_abc,tune_title):
     print('Processing '+tune_title+'...')
-    tune_notes = abc2notes(tune_abc)
+    tune_notes, shift = abc2notes(tune_abc)
     notes_filename = "m_"+sanitizeFileName(tune_title)
     with open(output_dir + '/'+ notes_filename+".txt", 'w') as notes:
         notes.write(tune_notes)
-    return notes_filename
+    return notes_filename, shift
 
 # =============Read files===================
 def readABC(input_abc, isFirstTune):
@@ -133,9 +139,9 @@ def readABC(input_abc, isFirstTune):
     for line in input_abc:
         # Process header
         if (line[:2] == 'X:' and len(abc_buffer) > 0):
-            notes_filename = writeNotes(abc_buffer, tune_title)
+            notes_filename, shift = writeNotes(abc_buffer, tune_title)
             addDBentry(database, tune_title, "Trad.", tune_type, None, 
-                   abc_buffer, None, notes_filename, isFirstTune)
+                   abc_buffer, None, notes_filename, shift, isFirstTune)
             abc_buffer = ''
             isFirstTune = False
         elif line[:2] == 'T:': tune_title = line[2:].replace('\n','')
@@ -143,9 +149,8 @@ def readABC(input_abc, isFirstTune):
         
         abc_buffer += line
         
-    notes_filename = writeNotes(abc_buffer, tune_title) 
-    addDBentry(database, tune_title, "Trad.", tune_type, None, 
-       abc_buffer, None, notes_filename, isFirstTune)
+    notes_filename, shift = writeNotes(abc_buffer, tune_title) 
+    addDBentry(database, tune_title, "Trad.", tune_type, None, abc_buffer, None, notes_filename, shift, isFirstTune)
     input_abc.close()
     
     return isFirstTune
@@ -171,13 +176,13 @@ def readJSON(input_json, isFirstTune):
         if tune_abc[0:2] != "X:": tune_abc = 'X:1\n' + tune_abc
     
         # Get notes
-        notes_filename = writeNotes(tune_abc,tune_title)
+        notes_filename, shift = writeNotes(tune_abc,tune_title)
         
         # Write DB entry
         
         isFirstTune = False
         addDBentry(database, tune_title, tune_author, tune_type, tune_license, 
-                   tune_abc,tune_sheetauthor, notes_filename, isFirstTune)
+                   tune_abc,tune_sheetauthor, notes_filename, shift, isFirstTune)
     return isFirstTune
 #==============================================
     
