@@ -11,7 +11,7 @@ import os, mido, re
 
 # =============ABC=====================
 def abc2midi(abc_file, output_file, verbose=False):
-    os.popen("abc2midi "+abc_file+" -o "+output_file + " -NGUI").read()
+    os.popen("abc2midi "+abc_file+" -o "+output_file + " -NGUI -NGRA").read()
     if verbose: print("Converted "+abc_file+" to MIDI")
 
 # =============Files====================
@@ -148,8 +148,8 @@ def readABC(input_abc, isFirstTune):
         elif line[:2] == 'R:': tune_type  = line[2:].replace('\n','').replace('"','\\"')
         
         abc_buffer += line
-        
-    notes_filename, shift = writeNotes(abc_buffer, tune_title) 
+
+    notes_filename, shift = writeNotes(abc_buffer.replace("~",""), tune_title) 
     addDBentry(database, tune_title, "Trad.", tune_type, None, abc_buffer, None, notes_filename, shift, isFirstTune)
     input_abc.close()
     
@@ -176,7 +176,7 @@ def readJSON(input_json, isFirstTune):
         if tune_abc[0:2] != "X:": tune_abc = 'X:1\n' + tune_abc
     
         # Get notes
-        notes_filename, shift = writeNotes(tune_abc,tune_title)
+        notes_filename, shift = writeNotes(tune_abc.replace("~",""),tune_title)
         
         # Write DB entry
         

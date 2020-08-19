@@ -7,8 +7,6 @@ import android.media.audiofx.PresetReverb;
 import android.os.Handler;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import fr.charleslabs.tinwhistletabs.music.synth.TinWhistleSynth;
 
@@ -45,6 +43,7 @@ public class MusicPlayer {
         TinWhistleSynth.reverb(music, (int)(SAMPLE_RATE*0.1f), 0.2f);
         TinWhistleSynth.reverb(music, (int)(SAMPLE_RATE*0.2f), 0.1f);
         TinWhistleSynth.reverb(music, (int)(SAMPLE_RATE*0.3f), 0.05f);
+        TinWhistleSynth.reverb(music, (int)(SAMPLE_RATE*0.4f), 0.05f);
 
         return toneToBytePCM(music);
     }

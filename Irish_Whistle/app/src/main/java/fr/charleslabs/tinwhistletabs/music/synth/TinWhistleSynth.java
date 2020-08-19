@@ -5,7 +5,7 @@ public class TinWhistleSynth {
     private final static float OSCI_AMP = 0.3f;
     private final static float ENV_ATTACK = 0.05f, ENV_DECAY = 0.2f, ENV_RELEASE = 0.2f, ENV_LEVEL_SUSTAIN =0.4f;
     private final static float VIBRATO_FREQ = 4f, VIBRATO_AMP=0.18f;
-    private final static float NOISE_AMP = 0.01f;
+    private final static float NOISE_AMP = 0.015f;
     //private final static PinkNoise pink = new PinkNoise();
 
     public static void genNote(float frequency, int numSamples, float[] music, int offset, int sampleRate) {
