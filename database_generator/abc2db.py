@@ -143,6 +143,8 @@ def readABC(input_abc, isFirstTune):
             addDBentry(database, tune_title, "Trad.", tune_type, None, 
                    abc_buffer, None, notes_filename, shift, isFirstTune)
             abc_buffer = ''
+            tune_title = ''
+            tune_type = 'Misc.'
             isFirstTune = False
         elif line[:2] == 'T:': tune_title = line[2:].replace('\n','')
         elif line[:2] == 'R:': tune_type  = line[2:].replace('\n','').replace('"','\\"')
