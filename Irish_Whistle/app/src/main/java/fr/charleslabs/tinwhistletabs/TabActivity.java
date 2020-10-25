@@ -199,6 +199,11 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
     }
 
     private void moveCursor(final Handler handler, final int index){
+        if (index >= notes.size() ){
+            stop();
+            return;
+        }
+
         // Move cursor
         if(!notes.get(index).isRest()) {
             drawCursor(true);
