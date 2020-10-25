@@ -108,7 +108,7 @@ def addDBentry(database, tune_title, tune_author, tune_type, tune_license, tune_
         database.write('"license":"'+tune_license.replace('\n','').replace('"','\\"')+'",')
     tune_license
     database.write('"whistle":"'+getWhistle(shift)+'",')
-    database.write('"abc":"'+tune_abc.replace('\r\n','\n').replace('\r','\n').replace('\n','\\\\n').replace('"','\\"')+'",')
+    database.write('"abc":"'+tune_abc.replace('\r\n','\n').replace('\r','\n').replace('\n','\\n').replace('"','\\"')+'",')
     database.write('"file":"'+notes_filename+'"')
     database.write('}')
 

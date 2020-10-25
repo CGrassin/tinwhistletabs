@@ -24,7 +24,7 @@ public class SheetActivity extends AppCompatActivity {
         if (!intent.hasExtra(TabActivity.EXTRA_ABC) ||
                 !intent.hasExtra(TabActivity.EXTRA_SHEET_TITLE))
             finish();
-        final String abc = (String)intent.getSerializableExtra(TabActivity.EXTRA_ABC);
+        final String abc = escape((String)intent.getSerializableExtra(TabActivity.EXTRA_ABC));
         final String title = (String)intent.getSerializableExtra(TabActivity.EXTRA_SHEET_TITLE);
 
         // Set action bar title
@@ -56,4 +56,24 @@ public class SheetActivity extends AppCompatActivity {
             finish();
         return true;
     }
+
+    /**
+     * escape()
+     *
+     * Escape a give String to make it safe to be printed or stored.
+     *
+     * @param s The input String.
+     * @return The output String.
+     **/
+    public static String escape(String s){
+        return s.replace("\\", "\\\\")
+                .replace("\t", "\\t")
+                .replace("\b", "\\b")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\f", "\\f")
+                .replace("\'", "\\'")
+                .replace("\"", "\\\"");
+    }
+
 }
