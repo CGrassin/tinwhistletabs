@@ -199,7 +199,7 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
     }
 
     private void moveCursor(final Handler handler, final int index){
-        if (index >= notes.size() ){
+        if (index >= notes.size()){
             stop();
             return;
         }
