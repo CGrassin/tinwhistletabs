@@ -14,7 +14,7 @@ public class SingleTapTouchListener implements View.OnTouchListener {
 
     private static final int MAX_CLICK_DURATION = 200;
     private long startClickTime = 0;
-    private SingleTapCallback callback;
+    private final SingleTapCallback callback;
 
     public SingleTapTouchListener(SingleTapCallback singleTapCallback) {
         this.callback = singleTapCallback;

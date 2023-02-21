@@ -11,8 +11,9 @@ import fr.charleslabs.tinwhistletabs.utils.Utils;
 public class TextViewScaleGestureDetector extends ScaleGestureDetector.SimpleOnScaleGestureListener{
     private static final float MIN_FONT_FACTOR = 0.75f, MAX_FONT_FACTOR = 2.0f;
 
-    private float minFontSize, maxFontSize;
-    private TextView textView;
+    private final float minFontSize;
+    private final float maxFontSize;
+    private final TextView textView;
 
     public TextViewScaleGestureDetector(@NonNull TextView textView){
         minFontSize = textView.getTextSize()*MIN_FONT_FACTOR;

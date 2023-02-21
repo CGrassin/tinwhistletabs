@@ -100,13 +100,13 @@ def addDBentry(database, tune_title, tune_author, tune_type, tune_license, tune_
     if not isFirstTune: database.write(',')
     database.write('\n{')
     database.write('"title":"'+tune_title+'",')
-    database.write('"author":"'+tune_author.replace('\n','').replace('"','\\"')+'",')
+    if tune_author is not None:
+        database.write('"author":"'+tune_author.replace('\n','').replace('"','\\"')+'",')
     database.write('"type":"'+tune_type.title()+'",')
     if tune_sheetauthor is not None: 
         database.write('"sheet_author":"'+tune_sheetauthor.replace('\n','').replace('"','\\"')+'",')
     if tune_license is not None: 
         database.write('"license":"'+tune_license.replace('\n','').replace('"','\\"')+'",')
-    tune_license
     database.write('"whistle":"'+getWhistle(shift)+'",')
     database.write('"abc":"'+tune_abc.replace('\r\n','\n').replace('\r','\n').replace('\n','\\n').replace('"','\\"')+'",')
     database.write('"file":"'+notes_filename+'"')
@@ -134,19 +134,22 @@ def readABC(input_abc, isFirstTune):
     abc_buffer = ''
     tune_title = ''
     tune_type = 'Misc.'
+    tune_author = None 
     
     input_abc = open(input_abc)
     for line in input_abc:
         # Process header
         if (line[:2] == 'X:' and len(abc_buffer) > 0):
             notes_filename, shift = writeNotes(abc_buffer, tune_title)
-            addDBentry(database, tune_title, "Trad.", tune_type, None, 
+            addDBentry(database, tune_title, tune_author, tune_type, None, 
                    abc_buffer, None, notes_filename, shift, isFirstTune)
             abc_buffer = ''
             tune_title = ''
             tune_type = 'Misc.'
+            tune_author = None
             isFirstTune = False
         elif line[:2] == 'T:': tune_title = line[2:].replace('\n','')
+        elif line[:2] == 'C:': tune_author = line[2:].replace('\n','')
         elif line[:2] == 'R:': tune_type  = line[2:].replace('\n','').replace('"','\\"')
         
         abc_buffer += line
@@ -165,7 +168,7 @@ def readJSON(input_json, isFirstTune):
     for tune in input_json:
         # Read attributes
         tune_title = tune['name']
-        tune_author = tune['author'] if "author" in tune else "Trad."
+        tune_author = tune['author'] if "author" in tune else None
         tune_type = tune['type'] if "type" in tune else "Misc."
         tune_license = tune['license'] if "license" in tune else "ODbL"
         tune_abc = tune['abc']

@@ -1,7 +1,7 @@
 package fr.charleslabs.tinwhistletabs.music;
 
 public class MusicNote {
-    private int duration; //ms
+    private final int duration; //ms
     private int pitch = 0; //keynumber, 0=rest
 
     /**

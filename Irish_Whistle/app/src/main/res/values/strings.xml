@@ -3,10 +3,11 @@
     <string name="dev_email">charles.grassin@gmail.com</string>
 
     <!-- List activity -->
-    <string name="mainActivity_sheetPicturePlaceholder">Sheet difficulty</string>
+    <string name="mainActivity_sheetPicturePlaceholder">Sheet picture</string>
     <string name="mainActivity_sheetTitlePlaceholder">Sheet title</string>
-    <string name="mainActivity_sheetAuthorPlaceholder">Sheet author</string>
+    <string name="mainActivity_sheetDetailsPlaceholder">Sheet details</string>
     <string name="mainActivity_no_results">No results…</string>
+    <string name="mainActivity_sheetDetails_string">%1$s , %2$s</string>
 
     <!-- About dialog -->
     <string name="aboutDialog_title">About Irish Whistle Tabs</string>

@@ -16,7 +16,7 @@ public class AppCreditsDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
-        return new AlertDialog.Builder(getActivity())
+        return new AlertDialog.Builder(requireActivity())
                 .setTitle(R.string.aboutDialog_title)
                 .setIcon(R.drawable.logo)
                 .setMessage(R.string.aboutDialog_message)

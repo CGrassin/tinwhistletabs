@@ -1,7 +1,6 @@
 package fr.charleslabs.tinwhistletabs.android;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +19,10 @@ import fr.charleslabs.tinwhistletabs.R;
 import fr.charleslabs.tinwhistletabs.music.MusicSheet;
 
 public class SheetsAdapter extends BaseAdapter implements Filterable{
-    private List<MusicSheet> sheets;
+    private final List<MusicSheet> sheets;
     private List<MusicSheet> sheetsFiltered;
-    private Context context;
-    private View noResult;
+    private final Context context;
+    private final View noResult;
 
     public SheetsAdapter(Context context,List<MusicSheet> sheets, View noResult) {
         this.sheets = sheets;
@@ -58,7 +57,7 @@ public class SheetsAdapter extends BaseAdapter implements Filterable{
         if(viewHolder==null){
             viewHolder = new ComponentViewHolder();
             viewHolder.sheetName = convertView.findViewById(R.id.mainActivity_SheetName);
-            viewHolder.sheetAuthor = convertView.findViewById(R.id.mainActivity_SheetAuthor);
+            viewHolder.sheetDetails = convertView.findViewById(R.id.mainActivity_SheetDetails);
             viewHolder.sheetImage = convertView.findViewById(R.id.mainActivity_sheetPicture);
             convertView.setTag(viewHolder);
         }
@@ -68,7 +67,8 @@ public class SheetsAdapter extends BaseAdapter implements Filterable{
 
         //Fill up the view
         viewHolder.sheetName.setText(sheet.getTitle());
-        viewHolder.sheetAuthor.setText(sheet.getType()+", "+sheet.getAuthor());
+        viewHolder.sheetDetails.setText(context.getResources().getString(R.string.
+                mainActivity_sheetDetails_string, sheet.getType(), sheet.getWhistle()));
         switch (sheet.getType()) {
             case "Reel":
                 viewHolder.sheetImage.setImageResource(R.drawable.reel);
@@ -125,7 +125,7 @@ public class SheetsAdapter extends BaseAdapter implements Filterable{
 
                     filterResults.count = resultsModel.size();
                     filterResults.values = resultsModel;
-                    Log.d("filter","Found " + filterResults.count + " with " + constraint.toString());
+                    //Log.d("filter","Found " + filterResults.count + " with " + constraint);
                 }
                 return filterResults;
             }
@@ -146,7 +146,7 @@ public class SheetsAdapter extends BaseAdapter implements Filterable{
     // View Holder
     private static class ComponentViewHolder{
         TextView sheetName;
-        TextView sheetAuthor;
+        TextView sheetDetails;
         ImageView sheetImage;
     }
 }

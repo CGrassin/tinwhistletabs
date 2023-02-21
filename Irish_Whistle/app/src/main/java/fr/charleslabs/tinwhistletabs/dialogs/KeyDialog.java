@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
+import java.util.Objects;
+
 import fr.charleslabs.tinwhistletabs.R;
 import fr.charleslabs.tinwhistletabs.music.MusicSettings;
 
@@ -20,8 +22,8 @@ public class KeyDialog extends DialogFragment {
     }
 
     // States
-    private String initialKey;
-    private KeyChangeCallback caller;
+    private final String initialKey;
+    private final KeyChangeCallback caller;
     private int selectedItem;
 
     public KeyDialog(String initialKey, KeyChangeCallback caller) {
@@ -33,7 +35,7 @@ public class KeyDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
-        return new AlertDialog.Builder(getActivity())
+        return new AlertDialog.Builder(requireActivity())
                 .setTitle(getText(R.string.keyDialog_title))
                 //.setIcon(R.drawable.ic_note)
                 //.setMessage(getResources().getString(R.string.tempoDialog_message, MusicSettings.MIN_TEMPO, MusicSettings.MAX_TEMPO))

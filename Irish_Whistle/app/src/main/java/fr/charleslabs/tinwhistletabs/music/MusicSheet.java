@@ -8,34 +8,43 @@ import java.util.List;
 
 public class MusicSheet implements Serializable {
     // Constants
-    /*final static public int DIFFICULTY_EASY = 0,
+    /* final static public int DIFFICULTY_EASY = 0,
             DIFFICULTY_MEDIUM = 1,
             DIFFICULTY_HARD = 2;*/
 
     // Allocated at construction
-    private String title,author, file,
-            //link = null,
-            type,
-            sheet_author = null,
-            license = null,
-            key = MusicSettings.DEFAULT_KEY;
+    private final String title;
+    private final String author;
+    private final String file;
+    private final String type;
+    private final String sheet_author;
+    private final String license ;
+    private final String key;
+
+    private final String whistle;
+
     private String abc;
     //public int difficulty = DIFFICULTY_MEDIUM;
 
     MusicSheet(JSONObject jsonObject) throws JSONException {
         // Mandatory
         this.title = jsonObject.getString("title");
-        this.author = jsonObject.getString("author");
         this.file = jsonObject.getString("file");
         this.type = jsonObject.getString("type");
         if (jsonObject.has("abc")) this.abc = jsonObject.getString("abc");
 
         // Optional
         //if (jsonObject.has("difficulty")) this.difficulty = jsonObject.getInt("difficulty");
-        //if (jsonObject.has("link")) this.link = jsonObject.getString("link");
+        if (jsonObject.has("author")) this.author = jsonObject.getString("author");
+        else this.author = null;
         if (jsonObject.has("sheet_author")) this.sheet_author = jsonObject.getString("sheet_author");
+        else this.sheet_author = null;
         if (jsonObject.has("license")) this.license = jsonObject.getString("license");
+        else this.license = null;
         if (jsonObject.has("key")) this.key = jsonObject.getString("key");
+        else this.key = MusicSettings.DEFAULT_KEY;
+        if (jsonObject.has("whistle")) this.whistle = jsonObject.getString("whistle");
+        else this.whistle = "D";
         //if (jsonObject.has("tempo")) this.tempo = jsonObject.getInt("tempo");
     }
 
@@ -91,4 +100,7 @@ public class MusicSheet implements Serializable {
     public String getLicense() {return license;}
     public String getABC() {return abc;}
     //public int getDifficulty() {return difficulty;}
+    public String getWhistle() {
+        return whistle;
+    }
 }

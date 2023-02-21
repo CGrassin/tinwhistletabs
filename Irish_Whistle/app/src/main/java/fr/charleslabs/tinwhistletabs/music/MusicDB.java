@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.charleslabs.tinwhistletabs.R;
 import fr.charleslabs.tinwhistletabs.utils.Utils;
 
 public class MusicDB {
@@ -24,8 +25,8 @@ public class MusicDB {
     }
     private MusicDB(Context c){
         try {
-            String fileContent =  Utils.fileToString(c.getResources().openRawResource(
-                    c.getResources().getIdentifier("db","raw",c.getPackageName())));
+            String fileContent =  Utils.fileToString(c.getResources().openRawResource(R.raw.db));
+
             JSONArray jsonSheets = new JSONArray(fileContent);
 
             for (int i=0; i < jsonSheets.length(); i++) {

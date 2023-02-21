@@ -72,7 +72,7 @@ public class SheetActivity extends AppCompatActivity {
                 .replace("\n", "\\n")
                 .replace("\r", "\\r")
                 .replace("\f", "\\f")
-                .replace("\'", "\\'")
+                .replace("'", "\\'")
                 .replace("\"", "\\\"");
     }
 

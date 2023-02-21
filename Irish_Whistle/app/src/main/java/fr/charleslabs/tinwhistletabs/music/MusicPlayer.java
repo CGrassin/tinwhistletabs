@@ -15,7 +15,7 @@ public class MusicPlayer {
 
     // Internal states
     private AudioTrack audioTrack = null;
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
 
     //Singleton
     private static MusicPlayer instance;

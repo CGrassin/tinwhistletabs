@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -17,21 +16,19 @@ import fr.charleslabs.tinwhistletabs.R;
 import fr.charleslabs.tinwhistletabs.music.MusicSheet;
 
 public class SheetInfoDialog extends DialogFragment {
-    private String message;
+    private final String message;
 
     public SheetInfoDialog(final Context c, @NonNull MusicSheet sheet) {
         StringBuilder str = new StringBuilder();
 
         str.append(c.getResources().getString(R.string.sheetInfoDialog_sheet_title, sheet.getTitle()));
-        str.append(c.getResources().getString(R.string.sheetInfoDialog_sheet_author, sheet.getAuthor()));
         str.append(c.getResources().getString(R.string.sheetInfoDialog_sheet_type, sheet.getType()));
-
-        if (sheet.getSheetAuthor() != null){
+        if (sheet.getAuthor() != null)
+            str.append(c.getResources().getString(R.string.sheetInfoDialog_sheet_author, sheet.getAuthor()));
+        if (sheet.getSheetAuthor() != null)
             str.append(c.getResources().getString(R.string.sheetInfoDialog_sheet_sheetAuthor, sheet.getSheetAuthor()));
-        }
-        if (sheet.getLicense() != null){
+        if (sheet.getLicense() != null)
             str.append(c.getResources().getString(R.string.sheetInfoDialog_sheet_license, sheet.getLicense()));
-        }
 
         this.message = str.toString();
     }
@@ -39,7 +36,7 @@ public class SheetInfoDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
-        return new AlertDialog.Builder(getActivity())
+        return new AlertDialog.Builder(requireActivity())
                 .setTitle(getText(R.string.sheetInfoDialog_title))
                 //.setIcon(R.drawable.ic_note)
                 .setMessage(Html.fromHtml(message))

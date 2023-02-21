@@ -25,11 +25,11 @@ public class TempoDialog extends DialogFragment {
     }
 
     // States
-    private int initialTempo;
+    private final int initialTempo;
     private EditText tempoText;
-    private boolean initialCBState;
+    private final boolean initialCBState;
     private CheckBox checkbox;
-    private TempoChangeCallback caller;
+    private final TempoChangeCallback caller;
 
     public TempoDialog(int initialTempo, boolean initialCBState, TempoChangeCallback caller) {
         super();
@@ -41,7 +41,7 @@ public class TempoDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
-        final Dialog dialog =  new AlertDialog.Builder(getActivity())
+        final Dialog dialog =  new AlertDialog.Builder(requireActivity())
                 .setTitle(getText(R.string.tempoDialog_title))
                 //.setIcon(R.drawable.ic_timer_black)
                 .setMessage(getResources().getString(R.string.tempoDialog_message,
