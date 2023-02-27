@@ -1,5 +1,6 @@
 package fr.charleslabs.tinwhistletabs;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,7 +40,9 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
     public static final String EXTRA_ABC= "fr.charleslabs.tinwhistletabs.ABC";
     public static final String EXTRA_SHEET_TITLE= "fr.charleslabs.tinwhistletabs.SHEET_TITLE";
     public static final float START_DELAY_AMOUNT = 1.5f; // s
-    public static final int COUNTDOWN_STEPS = 3;
+    private static final int COUNTDOWN_STEPS = 3;
+    private static final int SCROLL_DURATION = 750; // ms
+
     // States
     private  boolean isPlaying = false;
     private MusicSheet sheet = null;
@@ -47,6 +50,7 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
     private boolean isStartDelayed = false;
     private Handler musicHandler = new Handler();
     private List<MusicNote> notes;
+    private int scroll_value = -1;
 
     // UI elements
     private ScrollView scrollView;
@@ -184,6 +188,7 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
     }
 
     private void play(){
+        scroll_value = -1; // invalidate scroll value
         MusicPlayer.getInstance().move(MusicSheet.noteIndexToTime(notes, cursorPos,(float)tempo/100f));
         moveCursor(musicHandler, cursorPos);
         MusicPlayer.getInstance().play();
@@ -192,6 +197,7 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
     private void stop(){
         countdownOverlay.setVisibility(View.GONE);
         cursorPos = 0;
+        scroll_value = -1; // invalidate scroll value
         musicHandler.removeCallbacksAndMessages(null);
         AndroidUtils.clearSpans(span);
         MusicPlayer.getInstance().stop();
@@ -225,9 +231,17 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
         try {
                 span.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorAccent)),
                         cursorPos, cursorPos + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                Layout layout = tab.getLayout();
-                if (scroll)
-                    scrollView.scrollTo(0, layout.getLineTop(layout.getLineForOffset(cursorPos)));
+                final Layout layout = tab.getLayout();
+                final int current_scroll = layout.getLineTop(layout.getLineForOffset(cursorPos));
+                if (scroll && current_scroll != scroll_value) {
+                    scroll_value = current_scroll;
+                    try {
+                        ObjectAnimator.ofInt(scrollView, "scrollY",current_scroll)
+                                .setDuration(SCROLL_DURATION).start();
+                    } catch (Exception e) {
+                        scrollView.scrollTo(0, current_scroll);
+                    }
+                }
         } catch(Exception ignored){}
     }
 
