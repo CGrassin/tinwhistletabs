@@ -47,7 +47,6 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
     private  boolean isPlaying = false;
     private MusicSheet sheet = null;
     private int tempo = MusicSettings.DEFAULT_TEMPO;
-    private boolean isStartDelayed = false;
     private Handler musicHandler = new Handler();
     private List<MusicNote> notes;
     private int scroll_value = -1;
@@ -125,7 +124,7 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.tabAction_tempo:
-                final DialogFragment tempoDialog = new TempoDialog(tempo, isStartDelayed, this);
+                final DialogFragment tempoDialog = new TempoDialog(tempo, MusicSettings.isStartDelayed, this);
                 tempoDialog.show(getSupportFragmentManager(),"dialog");
                 break;
             case R.id.tabAction_key:
@@ -158,7 +157,7 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
     private void playPause(){
         if(!isPlaying){
             isPlaying = true;
-            if (!isStartDelayed)
+            if (!MusicSettings.isStartDelayed)
                 play();
             else{
                 drawCursor(true);
@@ -261,7 +260,7 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
             tempo = newTempo;
             this.setTune();
         }
-        this.isStartDelayed = isDelayApplied;
+        MusicSettings.isStartDelayed = isDelayApplied;
     }
     @Override
     public void keyChangeCallback(String newKey) {
