@@ -161,6 +161,7 @@ public class TabActivity extends AppCompatActivity implements TempoDialog.TempoC
             if (!isStartDelayed)
                 play();
             else{
+                drawCursor(true);
                 countdown(COUNTDOWN_STEPS-1);
             }
         } else {
