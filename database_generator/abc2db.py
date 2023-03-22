@@ -121,7 +121,7 @@ def abc2notes(tune_abc):
     rmFile("tmp.mid")
     return tune_notes, shift
 
-def writeNotes(tune_abc,tune_title):
+def writeNotes(tune_abc,tune_title, output_dir):
     print('Processing '+tune_title+'...')
     tune_notes, shift = abc2notes(tune_abc)
     notes_filename = "m_"+sanitizeFileName(tune_title)
@@ -130,7 +130,7 @@ def writeNotes(tune_abc,tune_title):
     return notes_filename, shift
 
 # =============Read files===================
-def readABC(input_abc, isFirstTune):
+def readABC(input_abc, isFirstTune, database, output_dir):
     abc_buffer = ''
     tune_title = ''
     tune_type = 'Misc.'
@@ -140,7 +140,7 @@ def readABC(input_abc, isFirstTune):
     for line in input_abc:
         # Process header
         if (line[:2] == 'X:' and len(abc_buffer) > 0):
-            notes_filename, shift = writeNotes(abc_buffer, tune_title)
+            notes_filename, shift = writeNotes(abc_buffer, tune_title, output_dir)
             addDBentry(database, tune_title, tune_author, tune_type, None, 
                    abc_buffer, None, notes_filename, shift, isFirstTune)
             abc_buffer = ''
@@ -154,13 +154,13 @@ def readABC(input_abc, isFirstTune):
         
         abc_buffer += line
 
-    notes_filename, shift = writeNotes(abc_buffer.replace("~",""), tune_title) 
+    notes_filename, shift = writeNotes(abc_buffer.replace("~",""), tune_title, output_dir) 
     addDBentry(database, tune_title, "Trad.", tune_type, None, abc_buffer, None, notes_filename, shift, isFirstTune)
     input_abc.close()
     
     return isFirstTune
 
-def readJSON(input_json, isFirstTune):
+def readJSON(input_json, isFirstTune, database, output_dir):
     # Read input
     with open(input_json, 'r') as content_file:
         input_json = json.loads(content_file.read())
@@ -181,7 +181,7 @@ def readJSON(input_json, isFirstTune):
         if tune_abc[0:2] != "X:": tune_abc = 'X:1\n' + tune_abc
     
         # Get notes
-        notes_filename, shift = writeNotes(tune_abc.replace("~",""),tune_title)
+        notes_filename, shift = writeNotes(tune_abc.replace("~",""),tune_title, output_dir)
         
         # Write DB entry
         
@@ -190,35 +190,36 @@ def readJSON(input_json, isFirstTune):
                    tune_abc,tune_sheetauthor, notes_filename, shift, isFirstTune)
     return isFirstTune
 #==============================================
+
+def main(input_json = "input.json", input_abc  = "input.abc", output_dir = "output"):
+    output_file = output_dir + "/db.json"
+
+    # Clean folder
+    filelist = os.listdir(output_dir)
+    for f in filelist:
+        os.remove(os.path.join(output_dir, f))
+
+    # Generate db
+    with open(output_file, 'w') as database:
+        isFirstTune = True
+        
+        database.write('[')
+        
+        isFirstTune = readABC(input_abc, isFirstTune, database, output_dir)
+        isFirstTune = readJSON(input_json, isFirstTune, database, output_dir)
+
+        database.write('\n]')
+
+    # Sort json
+    print('Sorting database...')
+    with open(output_file, 'r') as database:
+        database = json.load(database)
+        data = sorted(database, key=lambda k: k['title'])
+
+    with open(output_file, 'w') as database:
+        json.dump(data, database,ensure_ascii=False)
     
-input_json = "input.json"
-input_abc  = "input.abc"
-output_dir= "output"
-output_file = output_dir + "/db.json"
+    print('Done!')
 
-# Clean folder
-filelist = os.listdir(output_dir)
-for f in filelist:
-    os.remove(os.path.join(output_dir, f))
-
-# Generate db
-with open(output_file, 'w') as database:
-    isFirstTune = True
-    
-    database.write('[')
-    
-    isFirstTune = readABC(input_abc, isFirstTune)
-    isFirstTune = readJSON(input_json, isFirstTune)
-
-    database.write('\n]')
-
-# Sort json
-print('Sorting database...')
-with open(output_file, 'r') as database:
-    database = json.load(database)
-    data = sorted(database, key=lambda k: k['title'])
-
-with open(output_file, 'w') as database:
-    json.dump(data, database,ensure_ascii=False)
-    
-print('Done!')
+if __name__ == "__main__":
+    main()
